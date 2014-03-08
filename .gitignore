@@ -4,6 +4,17 @@
 
 .idea/
 
+# dart specific
+packages
+.project
+*.iml
+*.ipr
+*.iws
+*.dart.js
+*.js_
+*.js.deps
+*.js.map
+
 # sbt specific
 .cache/
 .history/

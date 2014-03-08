@@ -6,6 +6,7 @@ import spray.json.DefaultJsonProtocol._
 import spray.routing.Route
 
 import models.{Recipe, Task}
+import spray.http.HttpHeaders.RawHeader
 
 trait MainServer extends WebService {
 
@@ -25,23 +26,27 @@ trait MainServer extends WebService {
   val tasksAsJsonString: String = tasks.toJson.toString
   val recipesAsJsonString: String = recipes.toJson.toString
 
-  val indexPageRoute: Route = pathPrefix("") { getFromDirectory("src/main/webapp") }
+  val indexPageRoute: Route = pathPrefix("") { getFromDirectory("src/main/webapp2") }
 
   val taskRestRoutes = {
     pathPrefix("api" / "v1") {
       path("tasks") {
         get {
-          /*respondWithMediaType(`application/json`) {
-            respondWithHeaders(
-              RawHeader("Access-Control-Allow-Origin", "*, "),
-              RawHeader()) */
-          complete(tasksAsJsonString)
+          respondWithMediaType(`application/json`) {
+            complete(tasksAsJsonString)
+          }
         }
       } ~
       path("recipes") {
         get {
           respondWithMediaType(`application/json`) {
-            complete(recipesAsJsonString)
+            respondWithHeaders(
+              RawHeader("Access-Control-Allow-Origin", "*, "),
+              RawHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS"),
+              RawHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+            ){
+              complete(recipesAsJsonString)
+            }
           }
         }
       }

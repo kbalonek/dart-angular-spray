@@ -6,9 +6,16 @@ import spray.json.DefaultJsonProtocol._
 import spray.routing.Route
 
 import models.{Recipe, Task}
+import actors.DataStore.{Persist, Load}
 import spray.http.HttpHeaders.RawHeader
+import akka.actor.Props
+import akka.pattern.ask
+import actors.DataStore
 
 trait MainServer extends WebService {
+
+  this: ServerSupervisor =>
+    val dataStore = context.system.actorOf(Props[DataStore])
 
   implicit val taskJsonFormat = jsonFormat3(Task)
   implicit val recipeJsonFormat = jsonFormat7(Recipe)
@@ -19,12 +26,8 @@ trait MainServer extends WebService {
     new Task(3, "Linus Torvalds", "secure the future")
   )
 
-  val recipes: List[Recipe] = List(
-    new Recipe("123", "Name1", "Category1", List("egg", "butter"), "Mix butter with egg.", 4, "url1")
-  )
 
   val tasksAsJsonString: String = tasks.toJson.toString
-  val recipesAsJsonString: String = recipes.toJson.toString
 
   val indexPageRoute: Route = pathPrefix("") { getFromDirectory("src/main/webapp2") }
 
@@ -45,7 +48,11 @@ trait MainServer extends WebService {
               RawHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS"),
               RawHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
             ){
-              complete(recipesAsJsonString)
+              val response = (dataStore ? Load)
+                .mapTo[List[Recipe]]
+                .map(result => result.toJson.toString)
+                .recover { case _ => "error" }
+              complete(response)
             }
           }
         }

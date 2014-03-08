@@ -1,10 +1,11 @@
 Angular.dart/Scala/Spray/Akka
+=============================
 
 This is the recipe application from the basic Angular.dart tutorial (https://angulardart.org/tutorial/08-ch06-view.html) extended with a backend written in Scala, using Akka and Spray.
 
 Compared to the original recipe application, I am going to add editing and adding recipes as suggested in the tutorial as an exercise. In addition, I am going to implement the webservice basing on the template available here: http://typesafe.com/activator/template/dart-akka-spray
 
-The text below comes from the dart-akka-spray template.
+The text below comes from the dart-akka-spray template. Please note that to start the application with the typesafe activator you need to download activator-launch-1.0.13.jar and place it in the main directory.
 
 Scala/Spray/Akka/Dart
 =====================

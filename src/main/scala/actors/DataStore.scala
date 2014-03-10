@@ -3,6 +3,7 @@ package actors
 import akka.actor.Actor
 import models.Recipe
 import akka.event.Logging
+import com.mongodb.casbah.Imports._
 
 object DataStore {
   case class Persist(recipe: Recipe)
@@ -11,18 +12,34 @@ object DataStore {
 
 class DataStore extends Actor {
 
-  val recipes: List[Recipe] = List(
-    new Recipe("123", "Name1", "Category1", List("egg", "butter"), "Mix butter with egg.", 4, "url1")
-  )
+  val dbName = "recipeapp"
+  val recipesCollName = "recipes"
+  val categoriesCollName = "categories"
+
+  val mongoClient = MongoClient("localhost", 27017)
+  val db = mongoClient(dbName)
+  val recipesColl = db(recipesCollName)
 
   import DataStore.{Persist, Load}
 
   val log = Logging(context.system, this)
+
+
   def receive: Receive = {
     case Persist(recipe: Recipe) =>
       ???
     case Load =>
-      sender ! recipes
+      // load all objects from db and convert them to Recipe dtos
+      val result = for (obj <- recipesColl) yield new Recipe(
+            obj.getAs[String]("id").get,
+            obj.getAs[String]("name").get,
+            obj.getAs[String]("category").get,
+            obj.getAs[List[String]]("ingredients").get,
+            obj.getAs[String]("directions").get,
+            obj.getAs[Int]("rating").get,
+            obj.getAs[String]("imgUrl").get
+      )
+      sender ! result.toList
 
   }
 }

@@ -1,8 +1,8 @@
 [
-  {"id":1, "name":"Appetizers"},
-  {"id":2, "name":"Salads"},
-  {"id":3, "name":"Soups"},
-  {"id":4, "name":"Main Dishes"},
-  {"id":5, "name":"Side Dishes"},
-  {"id":6, "name":"Desserts"}
+  {"id":"1", "name":"Appetizers"},
+  {"id":"2", "name":"Salads"},
+  {"id":"3", "name":"Soups"},
+  {"id":"4", "name":"Main Dishes"},
+  {"id":"5", "name":"Side Dishes"},
+  {"id":"6", "name":"Desserts"}
 ]

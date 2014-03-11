@@ -1,5 +1,5 @@
 #!/bin/bash
-DB=recipeapp
+DB=recipesapp
 RECIPES_COLL=recipes
 CATEGORIES_COLL=categories
 mongoimport --jsonArray --db $DB --collection $RECIPES_COLL < recipes.json

@@ -8,7 +8,7 @@ import 'recipe.dart';
 
 class QueryService {
   String _recipesUrl = 'http://localhost:3000/api/v1/recipes';
-  String _categoriesUrl = 'categories.json';
+  String _categoriesUrl = 'http://localhost:3000/api/v1/categories';
 
   Future _loaded;
 
